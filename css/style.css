@@ -1,0 +1,58 @@
+body {
+	font-family: 'Open Sans',sans-serif;
+}
+
+form {
+	text-align: center;
+	padding: 20vw 0;
+}
+
+.autocomplete {
+    position: relative;
+    display: inline-block;
+    width: 20%;
+}
+
+.enter-city {
+    border: 1px solid transparent;
+    background-color: #f1f1f1;
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dropdown-list input {
+	display: none;
+}
+
+.dropdown-list {
+  display: block;
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  background-color: white;
+  padding: 0;
+  z-index: 20;
+  max-height: 15vw;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  box-shadow: 0px 5px 10.53px 2.47px rgba(108, 108, 108, 0.13);
+}
+
+.dropdown-item {
+	padding: 0.5vw;
+	cursor: pointer;
+	transition-duration: 0.4s;
+	border-bottom: 1px solid gainsboro;
+	box-sizing: border-box;
+	text-align: left;
+	width: 100%;
+	display: block;
+}
+
+.dropdown-item:hover {
+  color: white;
+  background-color: green;
+}
