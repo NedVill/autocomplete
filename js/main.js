@@ -5,6 +5,7 @@ var autocomplite =  {
 	init: function(inpt,arr) {
 		var array = arr;
 		this.input = inpt;
+		var count = 0;
 		inpt.addEventListener("click",function(){
 			var wrapper = document.createElement('div');
 			wrapper.setAttribute('class','dropdown-list');
@@ -15,12 +16,16 @@ var autocomplite =  {
 				dropItem.setAttribute('class','dropdown-item');
 				dropItem.innerHTML = array[i];
 				dropItem.innerHTML += '<input type="hidden" value="'+ array[i] + '">';
+				count++;
 				dropItem.addEventListener('click',function(){
 					inpt.value = this.getElementsByTagName('input')[0].value;
+					autocomplite.activeElem = inpt.value;
 					autocomplite.removeLists();
 				})
 				wrapper.appendChild(dropItem);
 			})
+			autocomplite.dropdownHeight(count);		
+			autocomplite.elemInWindow();
 		})			
 		inpt.addEventListener("input",function() {
 			autocomplite.removeLists();
@@ -29,6 +34,7 @@ var autocomplite =  {
 			wrapper.setAttribute('id',this.name + 'Dropdown');	
 			this.parentNode.appendChild(wrapper);
 			var val = this.value;
+			var count = 0;
 			array.forEach(function(item, i) {
 				if(array[i].substr(0,val.length).toUpperCase() == val.toUpperCase()) {
 					var dropItem = document.createElement('div');
@@ -36,19 +42,48 @@ var autocomplite =  {
 					dropItem.innerHTML = '<b>' + array[i].substr(0,val.length) + '</b>';
 					dropItem.innerHTML += array[i].substr(val.length);
 					dropItem.innerHTML += '<input type="hidden" value="'+ array[i] + '">';
+					count++;
 					dropItem.addEventListener('click',function(){
 						inpt.value = this.getElementsByTagName('input')[0].value;
+						autocomplite.activeElem = inpt.value;
 						autocomplite.removeLists();
 					})
 					wrapper.appendChild(dropItem);
 				}
-			})				
+			})	
+			autocomplite.dropdownHeight(count);		
+			autocomplite.elemInWindow();	
 		})	
 		document.addEventListener("click", function (e) {
 	        autocomplite.removeLists(e.target);
+	        if(autocomplite.activeElem && inpt.value == '') {
+	        	inpt.value = autocomplite.activeElem;
+	        }
 	    });
 	},
 	input: '',
+	activeElem: '',
+	dropdownHeight: function(count) {
+		var parent = document.getElementsByClassName('autocomplete')[0];
+		var dropList = parent.lastElementChild;
+		var dropItem = dropList.firstElementChild;
+		if(count > 5) {
+			dropList.style.height = dropItem.offsetHeight * 5 + 'px';
+		} else {
+			dropList.style.height = dropItem.offsetHeight * count + 'px';
+		}
+	},
+	elemInWindow: function() {
+		var height = window.innerHeight;
+		var parent = document.getElementsByClassName('autocomplete')[0];
+		var dropList = parent.lastElementChild;
+		var ListCoord = parseFloat(parent.offsetTop);
+		var dropdownListHeight = parseFloat(dropList.offsetHeight);
+		var summ = height - (ListCoord + dropdownListHeight);
+		if(summ < 0) {
+			dropList.classList.add('top');
+		}
+	},
 	removeActive: function(elem) {
 		elem.forEach(function(elem,i) {
 			elem[i].classList.remove('active')
