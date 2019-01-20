@@ -28,7 +28,7 @@ form {
 
 .dropdown-list.top {
   top: inherit;
-  bottom: 0;
+  bottom: 100%;
 }
 
 .dropdown-list {
