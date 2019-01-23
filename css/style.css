@@ -1,29 +1,67 @@
 body {
-	font-family: 'Open Sans',sans-serif;
+  font-family: 'Open Sans',sans-serif;
 }
 
-form {
-	text-align: center;
-	padding: 20vw 0;
-}
-
-.autocomplete {
+.dropdown-wrapper {
     position: relative;
     display: inline-block;
     width: 320px;
-}
-
-.enter-city {
+    padding-right: 40px;
+    box-sizing: border-box;
     border: 1px solid transparent;
     background-color: #f1f1f1;
+}
+
+.scrolled {
+    height: 179px;
+}
+
+.input-dropdown {
     padding: 10px;
     font-size: 16px;
     width: 100%;
+    height: 40px;
     box-sizing: border-box;
+    background: transparent;
+    border: none;
+}
+
+.dropdown-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    background-color: yellowgreen;
+}
+
+.dropdown-button::before {
+    content: "";
+    display: inline-block;
+    vertical-align: baseline;
+    position: relative;
+    width: 13px;
+    top: 8px;
+    left: 12px;
+    transform: rotate(-45deg);
+    height: 13px;
+    border-bottom: 0.15vw solid #ffffff;
+    border-left: 0.15vw solid #ffffff;
+}
+
+.dropdown-button.active::before { 
+    top: 16px;
+    transform: rotate(135deg);
+}
+
+.input-dropdown:focus {
+  border: none;
+  outline: none;
 }
 
 .dropdown-list input {
-	display: none;
+  display: none;
 }
 
 .dropdown-list.top {
@@ -46,14 +84,14 @@ form {
 }
 
 .dropdown-item {
-	padding: 0.5vw;
-	cursor: pointer;
-	transition-duration: 0.4s;
-	border-bottom: 1px solid gainsboro;
-	box-sizing: border-box;
-	text-align: left;
-	width: 100%;
-	display: block;
+  padding: 0.5vw;
+  cursor: pointer;
+  transition-duration: 0.4s;
+  border-bottom: 1px solid gainsboro;
+  box-sizing: border-box;
+  text-align: left;
+  width: 100%;
+  display: block;
 }
 
 .dropdown-item:hover {

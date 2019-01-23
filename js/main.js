@@ -4,78 +4,108 @@ var citys = ["Москва","Абрамцево","Алабино","Апреле�
 var autocomplite =  {
 	init: function(inpt,arr) {
 		var array = arr;
+		this.arr = array;
 		this.input = inpt;
-		var count = 0;
-		inpt.addEventListener("click",function(){
-			var wrapper = document.createElement('div');
-			wrapper.setAttribute('class','dropdown-list');
-			wrapper.setAttribute('id',this.name + 'Dropdown');			
-			this.parentNode.appendChild(wrapper);
-			array.forEach(function(item, i) {
-				var dropItem = document.createElement('div');
-				dropItem.setAttribute('class','dropdown-item');
-				dropItem.innerHTML = array[i];
-				dropItem.innerHTML += '<input type="hidden" value="'+ array[i] + '">';
-				count++;
-				dropItem.addEventListener('click',function(){
-					inpt.value = this.getElementsByTagName('input')[0].value;
-					autocomplite.activeElem = inpt.value;
-					autocomplite.removeLists();
-				})
-				wrapper.appendChild(dropItem);
-			})
-			autocomplite.dropdownHeight(count);		
-			autocomplite.elemInWindow();
-		})			
+		var wrapperParent = inpt.parentNode;
+		inpt.classList.add('input-dropdown');
+		var button = document.createElement('div');
+		var dropdownWrapper = document.createElement('div');
+		button.setAttribute('class','dropdown-button');
+		dropdownWrapper.setAttribute('class','dropdown-wrapper');	
+		dropdownWrapper.setAttribute('id','dropdown-wrapper_' + inpt.className[1]);
+		inpt.parentNode.appendChild(dropdownWrapper);
+		dropdownWrapper.appendChild(inpt);
+		dropdownWrapper.appendChild(button);
 		inpt.addEventListener("input",function() {
-			autocomplite.removeLists();
-			var wrapper = document.createElement('div');
-			wrapper.setAttribute('class','dropdown-list');
-			wrapper.setAttribute('id',this.name + 'Dropdown');	
-			this.parentNode.appendChild(wrapper);
 			var val = this.value;
-			var count = 0;
+			var count = 0;		
+			var wrapper = document.createElement('div');	
+			autocomplite.removeLists();
+			wrapper.setAttribute('class','dropdown-list');			
+			this.parentNode.appendChild(wrapper);
 			array.forEach(function(item, i) {
 				if(array[i].substr(0,val.length).toUpperCase() == val.toUpperCase()) {
 					var dropItem = document.createElement('div');
 					dropItem.setAttribute('class','dropdown-item');
 					dropItem.innerHTML = '<b>' + array[i].substr(0,val.length) + '</b>';
 					dropItem.innerHTML += array[i].substr(val.length);
-					dropItem.innerHTML += '<input type="hidden" value="'+ array[i] + '">';
+					dropItem.innerHTML += '<div class="drop-elem" data-value="'+ array[i] +'"></div>';
 					count++;
 					dropItem.addEventListener('click',function(){
-						inpt.value = this.getElementsByTagName('input')[0].value;
+						inpt.value = this.getElementsByTagName('div')[0].getAttribute('data-value');
 						autocomplite.activeElem = inpt.value;
 						autocomplite.removeLists();
 					})
 					wrapper.appendChild(dropItem);
 				}
 			})	
-			autocomplite.dropdownHeight(count);		
+			autocomplite.dropdownHeight(count,dropdownWrapper);
 			autocomplite.elemInWindow();	
-		})	
+		})
+		inpt.parentNode.addEventListener('click',function(e) {
+			if(e.target == inpt) {
+				inpt.value = '';
+			}			
+			if(!this.classList.contains('active')) {
+				autocomplite.removeLists();
+				this.classList.add('active');
+				var array = autocomplite.arr;
+				var count = 0;
+				button.classList.add('active');
+				var wrapper = document.createElement('div');
+				wrapper.setAttribute('class','dropdown-list');			
+				this.appendChild(wrapper);
+				array.forEach(function(item, i) {
+					var dropItem = document.createElement('div');
+					dropItem.setAttribute('class','dropdown-item');
+					dropItem.innerHTML = array[i];
+					dropItem.innerHTML += '<div class="drop-elem" data-value="'+ array[i] +'"></div>';
+					count++;
+					dropItem.addEventListener('click',function(){
+						inpt.value = this.getElementsByTagName('div')[0].getAttribute('data-value');
+						autocomplite.activeElem = inpt.value;
+						autocomplite.removeLists();
+					})
+					wrapper.appendChild(dropItem);
+				})	
+				autocomplite.dropdownHeight(count,this);
+				autocomplite.elemInWindow(this);					
+			} 
+			else if(e.target == button) {
+				if(this.classList.contains('active') && button.classList.contains('active')) {
+					e.target.classList.remove('active');
+					this.classList.remove('active');
+					inpt.value = autocomplite.activeElem;
+					autocomplite.removeLists(e.target);
+				} else {
+					this.classList.add('active');
+				}
+			}
+		})
 		document.addEventListener("click", function (e) {
-	        autocomplite.removeLists(e.target);
-	        if(autocomplite.activeElem && inpt.value == '') {
-	        	inpt.value = autocomplite.activeElem;
-	        }
+			if(e.target != button && e.target != inpt) {
+				autocomplite.removeLists(e.target);
+				dropdownWrapper.classList.remove('active');
+				button.classList.remove('active');
+				inpt.value = autocomplite.activeElem;
+			}
 	    });
 	},
+	arr: '',
 	input: '',
 	activeElem: '',
-	dropdownHeight: function(count) {
-		var parent = document.getElementsByClassName('autocomplete')[0];
-		var dropList = parent.lastElementChild;
+	dropdownHeight: function(count,elem) {
+		var dropList = elem.lastElementChild;
 		var dropItem = dropList.firstElementChild;
 		if(count > 5) {
-			dropList.style.height = dropItem.offsetHeight * 5 + 'px';
+			dropList.classList.add('scrolled');
 		} else {
-			dropList.style.height = dropItem.offsetHeight * count + 'px';
+			dropList.classList.remove('scrolled');
 		}
-	},
-	elemInWindow: function() {
+	},	
+	elemInWindow: function(elem) {
 		var height = window.innerHeight;
-		var parent = document.getElementsByClassName('autocomplete')[0];
+		var parent = elem;
 		var dropList = parent.lastElementChild;
 		var ListCoord = parseFloat(parent.offsetTop);
 		var dropdownListHeight = parseFloat(dropList.offsetHeight);
@@ -83,11 +113,6 @@ var autocomplite =  {
 		if(summ < 0) {
 			dropList.classList.add('top');
 		}
-	},
-	removeActive: function(elem) {
-		elem.forEach(function(elem,i) {
-			elem[i].classList.remove('active')
-		})
 	},
 	removeLists: function(elem) {
         var items = document.getElementsByClassName("dropdown-list");
@@ -97,6 +122,7 @@ var autocomplite =  {
                 items[i].parentNode.removeChild(items[i]);
             }
         }
-	},
+	}
 }
 autocomplite.init(document.getElementsByClassName('enter-city')[0],citys);
+//autocomplite.init(document.getElementsByClassName('enter-citys')[0],citys);
