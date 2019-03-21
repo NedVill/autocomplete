@@ -50,7 +50,7 @@ body {
     border-left: 0.15vw solid #ffffff;
 }
 
-.dropdown-button.active::before { 
+.dropdown-wrapper.active .dropdown-button::before {
     top: 16px;
     transform: rotate(135deg);
 }
@@ -95,6 +95,10 @@ body {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.disabled {
+  display: none;
 }
 
 .dropdown-item:hover {
