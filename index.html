@@ -1,18 +1,90 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-	<meta charset="utf-8">
-	<title>Test</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
-	<link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-	<section>
-		<input type="text" name="city" class="enter-city">
-		<input type="text" name="city" class="enter-citys">
-	</section>
-</body>
-<script src="js/main.js"></script>
+<!doctype html>
+
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>The HTML5 Herald</title>
+		<meta name="description" content="The HTML5 Herald">
+		<meta name="author" content="SitePoint">
+
+		<link rel="stylesheet" href="./css/style.css">
+
+	</head>
+
+	<body>
+		<div class="calc-block">
+			<div class="container-inner center-title">
+			  <span class="calc-desc">Калькулятор расчета стоимости перевозки груза</span>
+			  <span class="calc-small">Укажите пункты отправления и прибытия, а также параметры груза.</span>
+			</div>
+			<div class="container-inner calc_new" id="main_calc">
+				<div class="form-calc"> 
+					<form method="post" action="[[~212]]" id="calculator" class="calc-callback">
+						<div class="calc_left">
+							<div class="form-block reverse">
+								<span>Откуда</span>
+								<input type="text" name="from" class="from from-calc complete" autocomplete="off" placeholder="Выберите город из списка" >
+							</div>
+							<div class="form-block">
+								<span>Куда</span>                
+								<input type="text" name="to" class="to to-calc" autocomplete="off" placeholder="Выберите город из списка" >
+							</div>
+							<div class="form-block">
+								<span>Машина</span>
+								<select name="weight" id="weight">
+									<option value="1">1 - 2 тонны</option>
+									<option value="2">3 - 4,5 тонны</option>
+									<option value="3">5 - 6 тонн</option>
+									<option value="4">10 тонн</option>     
+									<option value="5">20 тонн</option>
+								</select>
+							</div>                    
+							<div class="form-block">
+								<span>Тип кузова</span>                
+								<select name="car" id="car">
+									<option class="ext" value="13">Борт</option>
+									<option class="ext" value="13">Тент</option>
+									<option class="ext" value="13">Фургон</option>
+									<option class="dop" value="15">Рефрижератор</option>
+								</select>  
+							</div>
+						</div>
+						<div class="calc_right">
+							<div class="row">
+								<div class="item">
+									<div class="ico-block ruble">
+										<span>Стоимость доставки:</span>
+										<b class="summ_dones summ_done">700 руб.</b>
+									</div>
+								</div>
+								<div class="item">
+									<div class="ico-block delive">
+										<span>Сроки доставки:</span>
+										<b>от 2 дней</b>
+									</div>
+								</div>
+							</div>
+							<div class="row-column">
+								<a onclick="yaCounter47888870.reachGoal ('calc2_click'); gtag('event', 'click', { 'event_category': 'button', 'event_label': 'calc2_click' } );" href="#calc-total" class="submit-calc payment">Рассчитать стоимость</a>
+								<span class="warning first">
+									Указанная цена является ориентировочной. Конечную стоимость можно узнать, отправив заявку. 
+									Стоимость может изменяться и в большую, и в меньшую сторону.
+								</span>
+							</div>
+						</div>
+					</form>  
+				</div>
+			</div>
+		</div>
+		<script src="./js/autocomplete.min.js"></script>
+		<script>
+			var inputs = document.querySelectorAll('input');
+			Array.prototype.forEach.call(inputs, function(input) {
+				new Autocomplete(input)
+			})
+		</script>
+	</body>
+
 </html>
